@@ -103,8 +103,14 @@ class Payslip(models.Model):
     def getOvertime(self):
         return self.overtime
 
+    def getTotalDeductions(self):
+        return self.deductions_tax + self.deductions_health + self.pag_ibig + self.sss
+    
     def getTotal_pay(self):
         return self.total_pay
+    
+    def getGrossPay(self):
+        return self.getCycleRate() + self.earnings_allowance + self.overtime
 
     def __str__(self):
         return f"pk: {self.pk}, Employee: {self.id_number.pk}, Period: {self.month} {self.date_range}, {self.year}, Cycle: {self.pay_cycle}, Total Pay: {self.total_pay}"

@@ -59,6 +59,13 @@ comments of my program.
                         <td class="text-end">{{ payslip.overtime|floatformat:2 }}</td>
                     </tr>
                 </tbody>
+                <hr>
+                <tfoot>
+                    <tr class="table-light">
+                        <th>GROSS PAY:</th>
+                        <th class="text-end">PHP {{ payslip.getGrossPay|floatformat:2 }}</th>
+                    </tr>
+                </tfoot>
             </table>
             <hr>
 
@@ -91,6 +98,12 @@ comments of my program.
                         </tr>
                     {% endif %}
                 </tbody>
+                <tfoot>
+                    <tr class="table-light">
+                        <th>TOTAL DEDUCTIONS</th>
+                        <th class="text-end">PHP {{ payslip.getTotalDeductions|floatformat:2 }}</th>
+                    </tr>
+                </tfoot>
              </table>
              <hr>
 
