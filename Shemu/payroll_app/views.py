@@ -17,7 +17,7 @@ comments of my program.
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Employee
+from .models import Employee, Payslip
 from .forms import EmployeeForm
 
 # Create your views here.
@@ -109,3 +109,114 @@ def update_employee(request, pk):
 
         return redirect('employee_list')
     return render(request, 'payroll_app/update_employee.html', {'employee': employee})
+
+# Payslips Page
+@login_required
+def payslips_view(request):
+    if request.user.is_staff:
+        payslips = Payslip.objects.all()
+    else:
+        try:
+            employee = Employee.objects.get(id_number=request.user)
+            payslips = Payslip.objects.filter(id_number=employee)
+        except Employee.DoesNotExist:
+            payslips = Payslip.objects.none()
+
+    employees = Employee.objects.all()
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    if request.method == 'POST':
+        payroll_for = request.POST.get('payroll_for')
+        month = request.POST.get('month')
+        year = request.POST.get('year')
+        cycle = int(request.POST.get('cycle'))
+
+        date_range = f"1-15" if cycle == 1 else f"16-{get_days_in_month(month)}"
+        target_employees = list(employees) if payroll_for == 'all' else list(Employee.objects.filter(id_number=payroll_for))
+        errors = []
+        for emp in target_employees:
+            already_exists = Payslip.objects.filter(id_number=emp, month=month, year=year, pay_cycle=cycle).exists()
+            if already_exists:
+                errors.append(f"Payslip already exists for {emp.name} ({emp.id_number}) — {month} {year} Cycle {cycle}")
+                continue
+
+            rate = emp.rate
+            allowance = emp.allowance or 0
+            overtime = emp.overtime_pay or 0
+            half_rate = rate / 2
+
+            if cycle == 1:
+                pag_ibig = 100
+                philhealth = 0
+                sss = 0
+                tax = (half_rate + allowance + overtime - pag_ibig) * 0.2
+                total_pay = (half_rate + allowance + overtime - pag_ibig) - tax
+            else:
+                pag_ibig = 0
+                philhealth = rate * 0.04
+                sss = rate * 0.045
+                tax = (half_rate + allowance + overtime - philhealth - sss) * 0.2
+                total_pay = (half_rate + allowance + overtime - philhealth - sss) - tax
+
+            Payslip.objects.create(
+                id_number=emp,
+                month=month,
+                date_range=date_range,
+                year=year,
+                pay_cycle=cycle,
+                rate=rate,
+                earnings_allowance=allowance,
+                deductions_tax=tax,
+                deductions_health=philhealth,
+                pag_ibig=pag_ibig,
+                sss=sss,
+                overtime=overtime,
+                total_pay=total_pay
+            )
+            emp.resetOvertime()
+
+        for err in errors:
+            from django.contrib import messages
+            messages.error(request, err)
+
+        return redirect('payslips')
+    
+    context = {
+        'payslips': payslips,
+        'employees': employees,
+        'months': months,
+    }
+    return render(request, 'payroll_app/payslips.html', context)
+
+def get_days_in_month(month_name):
+    days = {
+        'January': 31,
+        'February': 28,
+        'March': 31,
+        'April': 30,
+        'May': 31,
+        'June': 30,
+        'July': 31,
+        'August': 31,
+        'September': 30,
+        'October': 31,
+        'November': 30,
+        'December': 31
+    }
+    return days.get(month_name, 30)
+
+# View Payslip
+@login_required
+def view_payslip(request, pk):
+    payslip = get_object_or_404(Payslip, pk=pk)
+    
+    if not request.user.is_staff:
+        try:
+            employee = Employee.objects.get(user=request.user)
+            if payslip.id_number != employee:
+                return redirect('payslips')
+        except Employee.DoesNotExist:
+            return redirect('payslips')
+        
+    return render(request, 'payroll_app/view_payslip.html', {'payslip': payslip})
+
