@@ -1,3 +1,20 @@
+<!--
+Tashannah Doller, ; Gide Ng, ; Nathan Riley Sy, 244311
+April , 2026
+
+I hereby attest to the truth of the following facts:
+
+I have not discussed the HTML language code in my program with anyone
+other than my instructor or the teaching assistants assigned to this course.
+
+I have not used HTML language code obtained from another student, or
+any other unauthorized source, either modified or unmodified.
+
+If any HTML language code or documentation used in my program was
+obtained from another source, such as a textbook or course notes, that has been clearly noted with proper citation in the
+comments of my program.
+-->
+
 {% extends 'payroll_app/base.html' %}
 {% load static %}
 {% block navbar %}{% endblock %}
@@ -27,17 +44,17 @@
 
                     <div class="mb-3">
                         <label class="form-label">Rate</label>
-                        <input type="number" step="0.01" name="rate" value="{{ employee.rate }}" class="form-control" required>
+                        <input type="number" step="0.01" min="1" name="rate" value="{{ employee.rate }}" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Allowance (Optional)</label>
-                        <input type="number" step="0.01" name="allowance" value="{{ employee.allowance }}" class="form-control">
+                        <input type="number" step="0.01" min="0" name="allowance" value="{{ employee.allowance }}" class="form-control">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Overtime</label>
-                        <input type="number" step="0.01" name="overtime_pay" value="{{ employee.overtime_pay }}" class="form-control">
+                        <input type="number" step="0.01" min="0" name="overtime_pay" value="{{ employee.overtime_pay }}" class="form-control">
                     </div>
 
                     <div class="d-flex justify-content-center gap-1 mt-3">
@@ -62,3 +79,9 @@
     </div>
 </div>
 {% endblock %}
+
+
+<!--
+Reference(s):
+-  https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/readonly
+-->
