@@ -21,4 +21,4 @@ from .models import Employee
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = ['name', 'id_number', 'rate', 'allowance']  # overtime not yet included, pls add nlng if its related to ur part
+        fields = ['name', 'id_number', 'rate', 'allowance']

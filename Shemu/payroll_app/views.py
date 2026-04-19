@@ -95,19 +95,35 @@ def update_employee(request, pk):
         overtime_pay = request.POST.get('overtime_pay', '') or 0
 
         if not all([name, rate]):
-            return render(request, 'payroll_app/update_employee.html', {'employee': employee,'error': 'Please fill in required fields'})
+            return render(request, 'payroll_app/update_employee.html', {
+                'employee': employee,
+                'error': 'Please fill in required fields'
+            })
 
         try:
-            employee.rate = float(rate)
-            employee.allowance = float(allowance)
-            employee.overtime_pay = float(overtime_pay)
+            rate = float(rate)
+            allowance = float(allowance)
+            overtime_pay = float(overtime_pay)
         except ValueError:
-            return render(request, 'payroll_app/update_employee.html', {'employee': employee,'error': 'Invalid input'})
+            return render(request, 'payroll_app/update_employee.html', {
+                'employee': employee,
+                'error': 'Invalid input'
+            })
 
+        if allowance < 0 or overtime_pay < 0:
+            return render(request, 'payroll_app/update_employee.html', {
+                'employee': employee,
+                'error': 'Allowance and overtime cannot be negative'
+            })
+
+        employee.rate = rate
+        employee.allowance = allowance
+        employee.overtime_pay = overtime_pay
         employee.name = name
         employee.save()
 
         return redirect('employee_list')
+
     return render(request, 'payroll_app/update_employee.html', {'employee': employee})
 
 # Payslips Page
