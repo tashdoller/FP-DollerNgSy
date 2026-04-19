@@ -15,3 +15,105 @@ obtained from another source, such as a textbook or course notes, that has been 
 comments of my program.
 -->
 
+{% extends 'payroll_app/base.html' %}
+
+{% block content %}
+<div class="container">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Payroll Creation Form (admin only)-->
+     {% if user.is_staff %}
+     <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Payroll Creation</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row g-3 align-item-end">
+
+                    <div class="col-md-3">
+                        <label class="form-label">Payroll for</label>
+                        <select name="payroll_for" class="form-select" required>
+                            <option value="">Choose...</option>
+                            <option value="all">All Employees</option>
+                            {% for emp in employees %}
+                                <option value="{{ emp.id_number }}">{{ emp.id_number }} — {{ emp.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Month</label>
+                        <select name="month" class="form-select" required>
+                            <option value="">Choose...</option>
+                            {% for m in months %}
+                                <option value="{{ m }}">{{ m }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Year</label>
+                        <input type="text" name="year" class="form-control" placeholder="e.g. 2026" required>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Cycle</label>
+                        <select name="cycle" class="form-select" required>
+                            <option value="">Choose...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-dark w-100">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+     </div>
+     {% endif %}
+
+    <!-- Payslips Summary Table -->
+    <h2>Payslips Summary</h2>
+    <table class="table modern-table">
+        <thead class="table-dark">
+            <tr>
+                <th>ID Number</th>
+                <th>Date</th>
+                <th>Cycle</th>
+                <th>Total Pay</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slip in payslips %}
+            <tr>
+                <td>{{ slip.id_number.id_number }}</td>
+                <td>{{ slip.month }} {{ slip.date_range }}, {{ slip.year }}</td>
+                <td>{{ slip.pay_cycle }}</td>
+                <td>{{ slip.total_pay|floatformat:2 }}</td>
+                <td>
+                    <a href="{% url 'view_payslip' slip.pk %}" class="btn btn-dark btn-sm">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No payslips yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
