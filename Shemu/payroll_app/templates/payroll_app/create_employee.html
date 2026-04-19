@@ -1,0 +1,74 @@
+<!--
+Tashannah Doller, ; Gide Ng, ; Nathan Riley Sy, 244311
+April , 2026
+
+I hereby attest to the truth of the following facts:
+
+I have not discussed the HTML language code in my program with anyone
+other than my instructor or the teaching assistants assigned to this course.
+
+I have not used HTML language code obtained from another student, or
+any other unauthorized source, either modified or unmodified.
+
+If any HTML language code or documentation used in my program was
+obtained from another source, such as a textbook or course notes, that has been clearly noted with proper citation in the
+comments of my program.
+-->
+
+{% extends 'payroll_app/base.html' %}
+{% load static %}
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="margin-top: 10px;">
+    <div class="col-md-4">
+        <div class="card shadow rounded-4">
+
+            <div class="card-header text-dark text-center" style="background-color: #f1f1f1;">
+                <h4>Add a New Employee</h4>
+            </div>
+
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">ID Number</label>
+                        <input type="text" maxlength="7" name="id_number" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Rate</label>
+                        <input type="number" step="0.01" name="rate" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Allowance (Optional)</label>
+                        <input type="number" step="0.01" name="allowance" class="form-control">
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-1 mt-3">
+                        <button type="submit" class="btn btn-primary btn-sm px-3">
+                            Submit
+                        </button>
+
+                        <a href="{% url 'employee_list' %}" class="btn btn-secondary btn-sm px-3">
+                            Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+            {% if error %}
+            <div class="alert alert-danger text-center">
+                {{ error }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

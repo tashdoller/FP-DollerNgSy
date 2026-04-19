@@ -1,0 +1,64 @@
+<!--
+Tashannah Doller, ; Gide Ng, ; Nathan Riley Sy, 244311
+April , 2026
+
+I hereby attest to the truth of the following facts:
+
+I have not discussed the HTML language code in my program with anyone
+other than my instructor or the teaching assistants assigned to this course.
+
+I have not used HTML language code obtained from another student, or
+any other unauthorized source, either modified or unmodified.
+
+If any HTML language code or documentation used in my program was
+obtained from another source, such as a textbook or course notes, that has been clearly noted with proper citation in the
+comments of my program.
+-->
+
+{% extends 'payroll_app/base.html' %}
+{% load static %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-2">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <div class="text-center mb-3">
+                    <img src="{% static 'bootstrap/images/2logo.png' %}" alt="Logo" style="width: 60px; height: 60px;">
+                </div>
+
+                <h2 class="text-center mb-4">Login to Your Account</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Username:</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password:</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger text-center">
+                            Invalid login. Please try again.
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-dark w-100">
+                        Login
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

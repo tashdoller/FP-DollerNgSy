@@ -1,0 +1,83 @@
+<!--
+Tashannah Doller, ; Gide Ng, ; Nathan Riley Sy, 244311
+April , 2026
+
+I hereby attest to the truth of the following facts:
+
+I have not discussed the HTML language code in my program with anyone
+other than my instructor or the teaching assistants assigned to this course.
+
+I have not used HTML language code obtained from another student, or
+any other unauthorized source, either modified or unmodified.
+
+If any HTML language code or documentation used in my program was
+obtained from another source, such as a textbook or course notes, that has been clearly noted with proper citation in the
+comments of my program.
+-->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shemu Payroll System</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/custom.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- navbar -->
+    <div class="navbar-wrapper">
+        <nav class="navbar navbar-dark bg-dark rounded-nav">
+            <div class="container-fluid d-flex align-items-center px-4">
+
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'bootstrap/images/logo.png' %}" alt="logo" width="30" height="30" class="me-2">
+                    <span class="brand-text">S H E M U</span>
+                </div>
+
+                <!-- left buttons -->
+                <div class="d-flex align-items-center ms-4">
+                    {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                    <a href="{% url 'employee_list' %}" class="nav-btn me-3 text-decoration-none">
+                        Employees
+                    </a>
+                    {% endif %}
+
+                    <a href=# class="nav-btn text-decoration-none">Payslips</a>
+                    {% endif %}
+                </div>
+
+                <!-- logout -->
+                <div class="ms-auto">
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-btn border-0 text-decoration-none">
+                            Logout
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+
+            </div>
+        </nav>
+    </div>
+
+    <!-- content -->
+    <div class="container mt-4 flex-grow-1">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- footer -->
+    <footer class="bg-dark text-white text-center py-2 mt-auto">
+        <small>&copy; 2026. So LeyGiT!</small>
+    </footer>
+
+</body>
+
+</html>
