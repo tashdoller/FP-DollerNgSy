@@ -30,6 +30,7 @@ comments of my program.
 <body class="d-flex flex-column min-vh-100">
 
     <!-- navbar -->
+    {% block navbar %}
     <div class="navbar-wrapper">
         <nav class="navbar navbar-dark bg-dark rounded-nav">
             <div class="container-fluid d-flex align-items-center px-4">
@@ -67,6 +68,7 @@ comments of my program.
             </div>
         </nav>
     </div>
+    {% endblock %}
 
     <!-- content -->
     <div class="container mt-4 flex-grow-1">

@@ -17,8 +17,8 @@ comments of my program.
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Employee, Payslip
-from .forms import EmployeeForm
 
 # Create your views here.
 
@@ -26,21 +26,30 @@ def test_page(request): # this is only to test the base. remove once completed
     return render(request, 'payroll_app/base.html')
 
 # Employee Page
-@login_required(login_url='login')
+@login_required
 def employee_list(request):
+    if not request.user.is_staff:
+        return redirect('payslips')
+
     employees = Employee.objects.all()
     return render(request, 'payroll_app/employees.html', {'employees': employees})
 
 # Delete Employeee
-@login_required(login_url='login')
+@login_required
 def delete_employee(request, pk):
+    if not request.user.is_staff:
+        return redirect('payslips')
+
     employee = get_object_or_404(Employee, pk=pk)
     employee.delete()
     return redirect('employee_list')
 
 # Add Overtime
-@login_required(login_url='login')
+@login_required
 def add_overtime(request, pk):
+    if not request.user.is_staff:
+        return redirect('payslips')
+
     employee = get_object_or_404(Employee, pk=pk)
 
     if request.method == "POST":
@@ -60,6 +69,9 @@ def add_overtime(request, pk):
 # Create Employee
 @login_required
 def create_employee(request):
+    if not request.user.is_staff:
+        return redirect('payslips')
+
     if request.method == "POST":
         name = request.POST.get('name', '')
         id_number = request.POST.get('id_number', '')
@@ -87,6 +99,9 @@ def create_employee(request):
 # Update Employee
 @login_required
 def update_employee(request, pk):
+    if not request.user.is_staff:
+        return redirect('payslips')
+
     employee = get_object_or_404(Employee, pk=pk)
     if request.method == "POST":
         name = request.POST.get('name', '')
@@ -95,20 +110,13 @@ def update_employee(request, pk):
         overtime_pay = request.POST.get('overtime_pay', '') or 0
 
         if not all([name, rate]):
-            return render(request, 'payroll_app/update_employee.html', {
-                'employee': employee,
-                'error': 'Please fill in required fields'
-            })
-
+            return render(request, 'payroll_app/update_employee.html', {'employee': employee,'error': 'Please fill in required fields'})
         try:
             rate = float(rate)
             allowance = float(allowance)
             overtime_pay = float(overtime_pay)
         except ValueError:
-            return render(request, 'payroll_app/update_employee.html', {
-                'employee': employee,
-                'error': 'Invalid input'
-            })
+            return render(request, 'payroll_app/update_employee.html', {'employee': employee,'error': 'Invalid input'})
 
         if allowance < 0 or overtime_pay < 0:
             return render(request, 'payroll_app/update_employee.html', {
@@ -131,16 +139,21 @@ def update_employee(request, pk):
 def payslips_view(request):
     if request.user.is_staff:
         payslips = Payslip.objects.all()
+        employees = Employee.objects.all()
     else:
         try:
-            employee = Employee.objects.get(id_number=request.user)
+            employee = Employee.objects.get(user=request.user)
             payslips = Payslip.objects.filter(id_number=employee)
+            employees = Employee.objects.filter(user=request.user)
         except Employee.DoesNotExist:
             payslips = Payslip.objects.none()
+            employees = Employee.objects.none()
 
-    employees = Employee.objects.all()
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
+    if request.method == 'POST' and not request.user.is_staff:
+        return redirect('payslips')
+    
     if request.method == 'POST':
         payroll_for = request.POST.get('payroll_for')
         month = request.POST.get('month')
@@ -148,8 +161,14 @@ def payslips_view(request):
         cycle = int(request.POST.get('cycle'))
 
         date_range = f"1-15" if cycle == 1 else f"16-{get_days_in_month(month)}"
-        target_employees = list(employees) if payroll_for == 'all' else list(Employee.objects.filter(id_number=payroll_for))
+        
+        if payroll_for == 'all':
+            target_employees = list(employees)
+        else:
+            target_employees = list(employees.filter(id_number=payroll_for))
+
         errors = []
+        
         for emp in target_employees:
             already_exists = Payslip.objects.filter(id_number=emp, month=month, year=year, pay_cycle=cycle).exists()
             if already_exists:
@@ -192,7 +211,6 @@ def payslips_view(request):
             emp.resetOvertime()
 
         for err in errors:
-            from django.contrib import messages
             messages.error(request, err)
 
         return redirect('payslips')

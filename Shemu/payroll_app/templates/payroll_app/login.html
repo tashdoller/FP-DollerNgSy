@@ -19,6 +19,18 @@ comments of my program.
 {% load static %}
 
 {% block navbar %}
+<div class="navbar-wrapper">
+    <nav class="navbar navbar-dark bg-dark rounded-nav">
+        <div class="container-fluid d-flex align-items-center px-4">
+
+            <div class="d-flex align-items-center">
+                <img src="{% static 'bootstrap/images/logo.png' %}" alt="logo" width="30" height="30" class="me-2">
+                <span class="brand-text">S H E M U</span>
+            </div>
+
+        </div>
+    </nav>
+</div>
 {% endblock %}
 
 {% block content %}

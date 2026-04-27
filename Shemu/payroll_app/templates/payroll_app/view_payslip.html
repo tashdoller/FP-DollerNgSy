@@ -23,71 +23,72 @@ comments of my program.
         <div class="card shadow">
             <div class="card-body p-4">
 
-                <!-- Section 1: General Payslip Details -->
+                <!-- General Payslip Details -->
                 <div class="row mb-3">
                     <div class="col">
-                        <div><strong>NAME:</strong> {{ payslip.id_number.name }} </div>
+                        <div><strong>NAME:</strong> {{ payslip.id_number.name }}</div>
                         <div><strong>ID NUMBER:</strong> {{ payslip.id_number.id_number }}</div>
                     </div>
                     <div class="col text-end">
-                        <div><strong>DATE:</strong> {{ payslip.month }} {{ payslip.date_range }}, {{ payslip.year }}</div>
+                        <div><strong>DATE:</strong> {{ payslip.month }} {{ payslip.date_range }}, {{ payslip.year }}
+                        </div>
                         <div><strong>PAYSLIP ID:</strong> {{ payslip.pk }}</div>
                     </div>
                 </div>
-            </div>
-            <hr>
 
-            <!-- Section 2: Earnings -->
-            <table class="table table-borderless mb-2">
-                <thead>
-                    <tr>
-                        <th>EARNINGS:</th>
-                        <th class="text-end">AMOUNT</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Base Pay</td>
-                        <td class="text-end">{{ payslip.getCycleRate|floatformat:2 }}</td>
-                    </tr>
-                    <tr>
-                        <td>Allowances</td>
-                        <td class="text-end">{{ payslip.earnings_allowance|floatformat:2 }}</td>
-                    </tr>
-                    <tr>
-                        <td>Overtime</td>
-                        <td class="text-end">{{ payslip.overtime|floatformat:2 }}</td>
-                    </tr>
-                </tbody>
                 <hr>
-                <tfoot>
-                    <tr class="table-light">
-                        <th>GROSS PAY</th>
-                        <th class="text-end">PHP {{ payslip.getGrossPay|floatformat:2 }}</th>
-                    </tr>
-                </tfoot>
-            </table>
-            <hr>
 
-            <!-- Section 3: Deductions (cycle-specific) -->
-             <table class="table table-borderless mb-2">
-                <thead>
-                    <tr>
-                        <th>DEDUCTIONS:</th>
-                        <th class="text-end">AMOUNT</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>W/HOLDING TAX</td>
-                        <td class="text-end">{{ payslip.deductions_tax|floatformat:2 }}</td>
-                    </tr>
-                    {% if payslip.pay_cycle == 1 %}
+                <!-- Earnings -->
+                <table class="table table-borderless mb-2">
+                    <thead>
+                        <tr>
+                            <th>EARNINGS:</th>
+                            <th class="text-end">AMOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Base Pay</td>
+                            <td class="text-end">{{ payslip.getCycleRate|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Allowances</td>
+                            <td class="text-end">{{ payslip.earnings_allowance|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Overtime</td>
+                            <td class="text-end">{{ payslip.overtime|floatformat:2 }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-light">
+                            <th>GROSS PAY</th>
+                            <th class="text-end">PHP {{ payslip.getGrossPay|floatformat:2 }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <hr>
+
+                <!-- Deductions -->
+                <table class="table table-borderless mb-2">
+                    <thead>
+                        <tr>
+                            <th>DEDUCTIONS:</th>
+                            <th class="text-end">AMOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>W/HOLDING TAX</td>
+                            <td class="text-end">{{ payslip.deductions_tax|floatformat:2 }}</td>
+                        </tr>
+                        {% if payslip.pay_cycle == 1 %}
                         <tr>
                             <td>PAG-IBIG</td>
                             <td class="text-end">{{ payslip.pag_ibig|floatformat:2 }}</td>
                         </tr>
-                    {% else %}
+                        {% else %}
                         <tr>
                             <td>PHILHEALTH</td>
                             <td class="text-end">{{ payslip.deductions_health|floatformat:2 }}</td>
@@ -96,25 +97,28 @@ comments of my program.
                             <td>SSS</td>
                             <td class="text-end">{{ payslip.sss|floatformat:2 }}</td>
                         </tr>
-                    {% endif %}
-                </tbody>
-                <tfoot>
-                    <tr class="table-light">
-                        <th>TOTAL DEDUCTIONS</th>
-                        <th class="text-end">PHP {{ payslip.getTotalDeductions|floatformat:2 }}</th>
-                    </tr>
-                </tfoot>
-             </table>
-             <hr>
+                        {% endif %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-light">
+                            <th>TOTAL DEDUCTIONS</th>
+                            <th class="text-end">PHP {{ payslip.getTotalDeductions|floatformat:2 }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
 
-            <!-- Section 4: Net Pay -->
-            <div class="d-flex justify-content-between fs-5">
-                <strong>NET PAY:</strong>
-                <strong>PHP {{ payslip.total_pay|floatformat:2 }}</strong>
-            </div>
+                <hr>
 
-            <div class="text-center mt-4">
-                <a href="{% url 'payslips' %}" class="btn btn-dark btn-sm">← Back</a>
+                <!-- Net Pay -->
+                <div class="d-flex justify-content-between fs-5 px-2">
+                    <strong>NET PAY:</strong>
+                    <strong>PHP {{ payslip.total_pay|floatformat:2 }}</strong>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'payslips' %}" class="btn btn-secondary btn-sm">Back</a>
+                </div>
+
             </div>
         </div>
     </div>

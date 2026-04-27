@@ -75,7 +75,7 @@ comments of my program.
                         </select>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-2 pt-4">
                         <button type="submit" class="btn btn-dark w-100">Submit</button>
                     </div>
                 </div>
@@ -104,7 +104,7 @@ comments of my program.
                 <td>{{ slip.pay_cycle }}</td>
                 <td>{{ slip.total_pay|floatformat:2 }}</td>
                 <td>
-                    <a href="{% url 'view_payslip' slip.pk %}" class="btn btn-dark btn-sm">View</a>
+                    <a href="{% url 'view_payslip' slip.pk %}" class="btn btn-success btn-sm">View</a>
                 </td>
             </tr>
             {% empty %}
