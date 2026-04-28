@@ -153,10 +153,23 @@ def payslips_view(request):
     
     if request.method == 'POST':
         payroll_for = request.POST.get('payroll_for')
-        month = request.POST.get('month')
         year = request.POST.get('year')
-        cycle = int(request.POST.get('cycle'))
+        month = request.POST.get('month')
+        cycle_raw = request.POST.get('cycle')
 
+        if not year.isdigit() or len(year) != 4:
+            messages.error(request, "Enter a 4-digit year.")
+            return redirect('payslips')
+
+        if month not in months:
+            messages.error(request, "Invalid month.")
+            return redirect('payslips')
+
+        if cycle_raw not in ['1', '2']:
+            messages.error(request, "Invalid cycle.")
+            return redirect('payslips')
+
+        cycle = int(cycle_raw)
         date_range = f"1-15" if cycle == 1 else f"16-{get_days_in_month(month)}"
         
         if payroll_for == 'all':

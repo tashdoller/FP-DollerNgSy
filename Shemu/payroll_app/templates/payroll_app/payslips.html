@@ -1,5 +1,5 @@
 <!--
-Tashannah Doller, ; Gide Ng, ; Nathan Riley Sy, 244311
+Tashannah Doller, 245541; Gide Ng, ; Nathan Riley Sy, 244311
 April , 2026
 
 I hereby attest to the truth of the following facts:
@@ -21,24 +21,24 @@ comments of my program.
 <div class="container">
 
     {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
     {% endif %}
 
     <!-- Payroll Creation Form (admin only)-->
-     {% if user.is_staff %}
-     <div class="card shadow-sm mb-4">
+    {% if user.is_staff %}
+    <div class="card shadow-sm mb-4">
         <div class="card-header bg-dark text-white">
             <h5 class="mb-0">Payroll Creation</h5>
         </div>
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
-                <div class="row g-3 align-item-end">
+                <div class="row g-3 align-items-end">
 
                     <div class="col-md-3">
                         <label class="form-label">Payroll for</label>
@@ -46,7 +46,7 @@ comments of my program.
                             <option value="">Choose...</option>
                             <option value="all">All Employees</option>
                             {% for emp in employees %}
-                                <option value="{{ emp.id_number }}">{{ emp.id_number }} — {{ emp.name }}</option>
+                            <option value="{{ emp.id_number }}">{{ emp.id_number }} — {{ emp.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -56,14 +56,15 @@ comments of my program.
                         <select name="month" class="form-select" required>
                             <option value="">Choose...</option>
                             {% for m in months %}
-                                <option value="{{ m }}">{{ m }}</option>
+                            <option value="{{ m }}">{{ m }}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="col-md-2">
                         <label class="form-label">Year</label>
-                        <input type="text" name="year" class="form-control" placeholder="e.g. 2026" required>
+                        <input type="text" name="year" class="form-control" placeholder="e.g. 2026" maxlength="4"
+                            pattern="[0-9]{4}" title="Enter a valid year" required>
                     </div>
 
                     <div class="col-md-2">
@@ -81,8 +82,8 @@ comments of my program.
                 </div>
             </form>
         </div>
-     </div>
-     {% endif %}
+    </div>
+    {% endif %}
 
     <!-- Payslips Summary Table -->
     <h2>Payslips Summary</h2>
@@ -116,4 +117,3 @@ comments of my program.
     </table>
 </div>
 {% endblock %}
-
