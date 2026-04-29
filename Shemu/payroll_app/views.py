@@ -157,8 +157,8 @@ def payslips_view(request):
         month = request.POST.get('month')
         cycle_raw = request.POST.get('cycle')
 
-        if not year.isdigit() or len(year) != 4:
-            messages.error(request, "Enter a 4-digit year.")
+        if not year.isdigit() or len(year) != 4 or int(year) < 1:
+            messages.error(request, "Enter a valid 4-digit year (e.g. 2026).")
             return redirect('payslips')
 
         if month not in months:
