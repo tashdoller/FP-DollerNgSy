@@ -47,6 +47,37 @@ footer {
     color: white;
 }
 
+/* Login */
+.left-panel {
+    background: linear-gradient(135deg, #1e2226, #2c3136);
+    margin-top: 20px;   
+    margin-bottom: 20px;           
+    border-radius: 0 10px 10px 0;      
+}
+
+.btn-login {
+    background-color: #bce870;
+    color: #000;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    transition: 0.2s ease;
+}
+
+.btn-login:hover {
+    background-color: #8ad65f;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.card {
+    border-radius: 20px;
+}
+
+
 /* employees.html */
 .welcome-text {
     color: #14532d;
