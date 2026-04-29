@@ -32,56 +32,40 @@ comments of my program.
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center align-items-center vh-50">
-    <div class="col-lg-7">
-        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
-            <div class="row g-0">
+<div class="row justify-content-center mt-3">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
 
-                <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center left-panel">
-                    <div class="text-center">
-                        <img src="{% static 'bootstrap/images/logo.png' %}" width="120" class="mb-3">
-                        <h4 class="text-white fw-bold">S H E M U</h4>
-                    </div>
+                <div class="text-center mb-3">
+                    <img src="{% static 'bootstrap/images/2logo.png' %}" width="60">
                 </div>
 
-                <div class="col-md-6">
-                    <div class="card-body p-4">
+                <h2 class="text-center mb-4">Login to Your Account</h2>
 
-                        <div class="text-center mb-3">
-                            <img src="{% static 'bootstrap/images/2logo.png' %}" width="50">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Username:</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password:</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger text-center">
+                            Invalid login. Please try again.
                         </div>
+                    {% endif %}
 
-                        <h3 class="text-center mb-3">Welcome</h3>
-                        <p class="text-center text-muted small mb-4">
-                            Please enter your username and password
-                        </p>
-
-                        <form method="POST">
-                            {% csrf_token %}
-
-                            <div class="mb-3">
-                                <label class="form-label">Username:</label>
-                                <input type="text" name="username" class="form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Password:</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-
-                            {% if form.errors %}
-                                <div class="alert alert-danger text-center">
-                                    Invalid login. Please try again.
-                                </div>
-                            {% endif %}
-
-                            <button type="submit" class="btn btn-login w-100">
-                                Sign In
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
+                    <button type="submit" class="btn btn-dark w-100">
+                        Login
+                    </button>
+                </form>
 
             </div>
         </div>
