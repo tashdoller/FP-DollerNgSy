@@ -87,6 +87,7 @@ hr {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
     border-radius: 10px;
     transition: 0.2s ease;
+    background-color: #fbfbfb;
 }
 
 .modern-table tbody tr:hover {
