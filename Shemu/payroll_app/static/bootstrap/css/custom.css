@@ -84,10 +84,10 @@ hr {
 }
 
 .modern-table tbody tr {
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06) !important;
+    border-radius: 10px !important;
     transition: 0.2s ease;
-    background-color: #fbfbfb;
+    background-color: #fbfbfb !important;
 }
 
 .modern-table tbody tr:hover {
