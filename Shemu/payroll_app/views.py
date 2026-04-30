@@ -135,12 +135,12 @@ def update_employee(request, pk):
 @login_required
 def payslips_view(request):
     if request.user.is_staff:
-        payslips = Payslip.objects.all()
+        payslips = Payslip.objects.all().order_by('id_number__name', 'year', 'month', 'pay_cycle')
         employees = Employee.objects.all()
     else:
         try:
             employee = Employee.objects.get(user=request.user)
-            payslips = Payslip.objects.filter(id_number=employee)
+            payslips = Payslip.objects.filter(id_number=employee).order_by('year', 'month', 'pay_cycle')
             employees = Employee.objects.filter(user=request.user)
         except Employee.DoesNotExist:
             payslips = Payslip.objects.none()
